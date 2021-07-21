@@ -57,7 +57,7 @@ class Board:
     def get_community_or_chance(self):
         return random.randint(0, 16)
     
-    def _parse_board(self, filename = './boards/parse_board.txt'):
+    def _parse_board(self, filename = './boards/parse_board_indian.txt'):
         count = 0
         with open(filename, 'r') as f:
             while (True):

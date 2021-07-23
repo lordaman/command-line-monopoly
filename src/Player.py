@@ -96,10 +96,13 @@ class Player:
     
     
     # 2: Invalid id, 1: Insufficinet funds, 0: Successful
+    # 3: already mortgaged
     def demortgage_card(self, id) -> int:
         if (id not in self.cards):
             return 2
         card = self.cards[id]
+        if not card.mortgaged:
+            return 3
         rem_balance = self.balance - card.get_demortgage_value()
         if (rem_balance < 0):
             return 1

@@ -55,7 +55,7 @@ class Board:
         self.currentPlayer = -1
     
     def get_community_or_chance(self):
-        return random.randint(0, 16)
+        return random.randint(0, 15)
     
     def _parse_board(self, filename = './boards/parse_board_indian.txt'):
         count = 0
@@ -110,14 +110,16 @@ class Board:
         dead_alive = [True] * dead_alive_count
         curr_player = 0
         while (dead_alive_count > 1):
-            print('Current bid: ${}'.format(curr_bid))
-            if (self.players[curr_player].balance <= curr_bid):
+            
+            if (dead_alive[curr_player] and 
+                self.players[curr_player].balance <= curr_bid):
                 print('{} has insufficinet funds to make bid!'.format(
                     self.players[curr_player].name
                 ))
                 dead_alive[curr_player] = False
                 dead_alive_count -= 1
             if (dead_alive[curr_player]):
+                print('Current bid: ${}'.format(curr_bid))
                 try:
                     player_bid = int(input('{}\'s (balance: {}) bid: '.format(
                         self.players[curr_player].name, 
@@ -168,7 +170,7 @@ class Board:
     
     @classmethod
     def roll_dice(cls):
-        return random.randint(0, 6)
+        return random.randint(1, 6)
     
     def roll_dice_for_curr_player(self, pos, forward = 0):
         if (forward > 0):

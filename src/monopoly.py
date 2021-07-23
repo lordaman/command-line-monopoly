@@ -44,6 +44,7 @@ class monopoly:
     
     def go_to_jail(self):
         self.board.jail_players[self.board.players[self.curr_player].id] = 3
+        self.board.player_positions[self.curr_player] = 10
         self.curr_player = (self.curr_player + 1) % len(self.board.players)
         self.num_rolls = 0
 
@@ -186,8 +187,7 @@ class monopoly:
 
     
     def chance_function(self):
-        # val = self.board.get_community_or_chance()
-        val = 15
+        val = self.board.get_community_or_chance()
         cplayer = self.board.players[self.curr_player]
         print(self.board.print_chance_community(Board.chance[val]))
         if val == 0:
@@ -205,9 +205,9 @@ class monopoly:
         elif val == 4:
             self.get_rent(15)
         elif val == 5:
-            jump_pos = ((self.board.
+            jump_pos = (((self.board.
                 player_positions[
-                self.curr_player]+5)/10)*10 + 5
+                self.curr_player]+5)//10)*10 + 5) % len(self.board.board)
             self.jump_to_place(jump_pos, True)
         elif val == 6:
             rent = (len(self.board.players) - 1) * 50
@@ -239,9 +239,9 @@ class monopoly:
         elif val == 11:
             pos = self.board.player_positions[self.curr_player]
             if pos > 12 and pos < 28:
-                self.jump_to_place(28)
+                self.jump_to_place(28, False)
             else:
-                self.jump_to_place(12)
+                self.jump_to_place(12, False)
         elif val == 12:
             cplayer.balance += 150
         elif val == 13:
@@ -249,9 +249,9 @@ class monopoly:
         elif val == 14:
             self.jump_to_place(39, False)
         elif val == 15:
-            jump_pos = ((self.board.
+            jump_pos = (((self.board.
                 player_positions[
-                self.curr_player]+5)//10)*10 + 5
+                self.curr_player]+5)//10)*10 + 5) % len(self.board.board)
             self.jump_to_place(jump_pos, True)
 
     def check_strings(self, s):
@@ -384,7 +384,7 @@ class monopoly:
             elif action == 'build' or action == '5':
                 print(self.board.players[self.curr_player].get_cards())
                 try:
-                    property_id = int(input('Input property ID number to raise money on: ').strip())
+                    property_id = int(input('Input property ID number to build house ot hotel on: ').strip())
                 except:
                     print('Invalid property ID number')
                     continue
@@ -410,14 +410,19 @@ class monopoly:
                 try:
                     self.print_players()
                     player2_id = int(
-    input('Input ID number of player you want to trade with? (Enter number): ').strip())
+                        input('Input ID number of player you want to trade with? (Enter number): ').strip())
                     player2_pos, player2_tmp = self.board._get_player_using_id(player2_id)
                     if player2_pos == -1 or self.curr_player == player2_pos:
                         print('Invalid player ID. Try trade again:(')
                         continue
-                    money_offer = int(input('Enter amount of money offered: $').strip())
-                    money_request = int(input('Enter amount of money requested: $').strip())
                     player_tmp = self.board.players[self.curr_player]
+                    money_offer = int(input('Money from {} -> {}: $'.format(
+                        player_tmp.name, player2_tmp.name
+                    )).strip())
+                    money_request = int(input('Money from {} -> {}: $'.format(
+                        player2_tmp.name, player_tmp.name
+                    )).strip())
+                    
                     if (player2_tmp.check_money(money_in = money_offer, money_out = money_request)):
                         print('Requested player does not have sufficient funds to make trade:(')
                         continue
@@ -496,7 +501,7 @@ class monopoly:
             elif action == 'demort' or action == '9':
                 print(self.board.players[self.curr_player].get_cards())
                 try:
-                    property_id = int(input('Input property ID number to raise money on: ').strip())
+                    property_id = int(input('Input property ID number to demortgage: ').strip())
                 except:
                     print('Invalid property ID number')
                     continue
@@ -508,10 +513,12 @@ class monopoly:
                     print('Property ID was not found in your cards.')
                 elif tmp == 1:
                     print('Insufficient funds to demortgage property:(')
+                elif tmp == 3:
+                    print('Card is not mortgaged! duh!')
 
             elif action == 'card' or action == '10':
                 try:
-                    property_id = int(input('Input property ID number to raise money on: ').strip())
+                    property_id = int(input('Input property ID number to view full property stats: ').strip())
                 except:
                     print('Invalid property ID number')
                     continue

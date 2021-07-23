@@ -9,7 +9,7 @@ Download the source code, navigate to the folder, and use the following command 
 
 At any point in the game when its your turn you can type 'help' or '0' to get options for the next move.
 
-[Contribution guidelines for this project](images/game.png)
+[How the game looks!](images/game.png)
 
 
   

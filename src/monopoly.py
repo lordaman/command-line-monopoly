@@ -9,13 +9,27 @@ from os import system, name
 from bcolors import bcolors
 
 class monopoly:
-    def __init__(self, roll_choice):
+    def __init__(self, roll_choice, board_txt):
         super().__init__()
         self.board = Board()
-        self.board._parse_board()
+        self.board._parse_board(filename = board_txt)
         self.curr_player = 0
         self.num_rolls = 0
         self.roll_choice = roll_choice
+    
+    def print_options(self):
+        print('\t0/help    : Print all options')
+        print('\t1/roll    : To roll the dice')
+        print('\t2/players : Get all the players and their balances')
+        print('\t3/stats   : To look at your and somebody else\'s cards')
+        print('\t4/refresh : Clear and print the board again')
+        print('\t5/build   : Build a house or hotel')
+        print('\t6/trade   : Trade cards or money with another player.')
+        print('\t7/raise   : Sell houses & hotels or mortgage properties to raise money')
+        print('\t8/done    : Done with your turn')
+        print('\t9/demort  : Demortgage card')
+        print('\t10/card   : Get card statistics')
+        print('\t11/end    : To end the game')
 
     def clear(self):
         if name == 'nt':
@@ -96,7 +110,7 @@ class monopoly:
             while True:
                 print(repr(forward_land))
                 buy_option = input('Do you want to buy {}? {}[y/n]{}: '.format(
-                    forward_land.name, bcolors.YELLOW, bcolors.ENDC)).lower()
+                    forward_land.name.replace('_', ' ').capitalize(), bcolors.YELLOW, bcolors.ENDC)).lower()
                 if (len(buy_option) < 1):
                     continue
                 if buy_option[0] == 'y':
@@ -104,18 +118,35 @@ class monopoly:
                         print('You do not have sufficient funds! It\'s a bidding war')
                         self.board.bid_war(forward_land)
                     else:
-                        print('You have bought {}!'.format(forward_land.name))
+                        print('You have bought {}!'.format(forward_land.name.replace('_', ' ').capitalize()))
                     break
                 elif buy_option[0] == 'n':
                     self.board.bid_war(forward_land)
                     break
                 else:
                     print('Invalid input')
+    
+    def jump_to_place(self, jump_pos, double_rent):
+        if (jump_pos < 
+            self.board.player_positions[self.curr_player]):
+            self.receive_salary()
+        self.board.player_positions[self.curr_player] = jump_pos
+        forward_land = self.board.board[jump_pos]
+        print('You have landed on {}!'.format(
+            forward_land.name.replace('_', ' ').capitalize()))
+        roll_number = 0
+        if (forward_land.get_type() == 1):
+            roll_number = Board.roll_dice() + Board.roll_dice()
+            print('You rolled a {}'.format(roll_number))
+        if (double_rent):
+            self.roll_action_card(forward_land, -1)
+        else:
+            self.roll_action_card(forward_land, roll_number)
 
     def community_function(self):
         val = self.board.get_community_or_chance()
         cplayer = self.board.players[self.curr_player]
-        print(self.board.print_chance_community(Board.cc[val]))
+        print(self.board.print_chance_community(self.board.cc[val]))
         if val == 0:
             cplayer.balance += 100
         elif val == 1:
@@ -167,29 +198,11 @@ class monopoly:
             self.get_rent(100)
         elif val == 15:
             cplayer.balance += 25
-    
-    def jump_to_place(self, jump_pos, double_rent):
-        if (jump_pos < 
-            self.board.player_positions[self.curr_player]):
-            self.receive_salary()
-        self.board.player_positions[self.curr_player] = jump_pos
-        forward_land = self.board.board[jump_pos]
-        print('You have landed on {}!'.format(
-            forward_land.name.replace('_', ' ')))
-        roll_number = 0
-        if (forward_land.get_type() == 1):
-            roll_number = Board.roll_dice() + Board.roll_dice()
-            print('You rolled a {}'.format(roll_number))
-        if (double_rent):
-            self.roll_action_card(forward_land, -1)
-        else:
-            self.roll_action_card(forward_land, roll_number)
 
-    
     def chance_function(self):
         val = self.board.get_community_or_chance()
         cplayer = self.board.players[self.curr_player]
-        print(self.board.print_chance_community(Board.chance[val]))
+        print(self.board.print_chance_community(self.board.chance[val]))
         if val == 0:
             self.jump_to_place(5, False)
         elif val == 1:
@@ -363,11 +376,11 @@ class monopoly:
                 forward_land = self.board.board[self.board.player_positions[self.curr_player]]
                 if (isinstance(forward_land, str)):
                     print('You have landed on {}!'.format(
-                        forward_land.replace('_', ' ')))
+                        forward_land.replace('_', ' ').capitalize()))
                     self.check_strings(forward_land)
                 else:
                     print('You have landed on {}!'.format(
-                        forward_land.name.replace('_', ' ')))
+                        forward_land.name.replace('_', ' ').capitalize()))
                     self.roll_action_card(forward_land, salary[0])
 
             elif action == 'done' or action == '8':
@@ -534,18 +547,7 @@ class monopoly:
                     print(repr(card))
             
             elif action == 'help' or action == '0':
-                print('\t0/help    : Print all options')
-                print('\t1/roll    : To roll the dice')
-                print('\t2/players : Get all the players and their balances')
-                print('\t3/stats   : To look at your and somebody else\'s cards')
-                print('\t4/refresh : Clear and print the board again')
-                print('\t5/build   : Build a house or hotel')
-                print('\t6/trade   : Trade cards or money with another player.')
-                print('\t7/raise   : Sell houses & hotels or mortgage properties to raise money')
-                print('\t8/done    : Done with your turn')
-                print('\t9/demort  : Demortgage card')
-                print('\t10/card   : Get card statistics')
-                print('\t11/end    : To end the game')
+                self.print_options()
             else:
                 print('Couldn\'t recognise input! Type \'help\' or \'0\' for more options.')
         else:
@@ -556,13 +558,26 @@ class monopoly:
                 print('\t{}'.format(i.name))
 
 while True:
-    r_choice = input('Do you have dice to play with? {}[y/n]{} '.format(
-        bcolors.YELLOW, bcolors.ENDC)).lower()
+    print('1. Indian Board\n2. American Board')
+    try:
+        b_choice = int(input('Which board do you want to play with? (Enter Number): '))
+        if b_choice == 1:
+            b_txt = './boards/parse_board_indian.txt'
+        else:
+            b_txt = './boards/parse_board_american.txt'
+        break
+    except:
+        print('Invalid Choice! Choose again.')
+
+
+while True:
+    r_choice = input('Do you have dice to play with? [y/n] ').lower()
     if len(r_choice) < 1:
         continue
     if (r_choice[0] == 'y'):
-        mo = monopoly(True)
-    else:
-        mo = monopoly(False)
-    break
+        mo = monopoly(True, b_txt)
+        break
+    elif (r_choice[0] == 'n'):
+        mo = monopoly(False, b_txt)
+        break
 mo.run_game()        

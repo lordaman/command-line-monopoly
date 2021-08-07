@@ -18,13 +18,13 @@ class Trade_Card:
         return self.name == another_card.name
     
     def __str__(self):
-        return '{}{:16} ${:3d}'.format(
+        return '{}{:25} ${:3d}'.format(
             Trade_Card.get_color_code(self.color), self.name, 
             self.purchase_price) + (
             ' O{}'.format(self.player) if self.sold else '') + (
             ' M' if self.mortgaged else '') + (
             ' {}h'.format(self.houses) if self.houses else '') + (
-            ' {}H'.format(self.hotels) if self.hotels else '') + f'{bcolors.ENDC}'
+            ' {}H'.format(self.hotels) if self.hotels else '') + f' {bcolors.ENDC}'
     
     def __repr__(self):
         curtain = '=' * 40
@@ -66,4 +66,4 @@ class Trade_Card:
             return bcolors.BLUE
         elif color == 'GREEN':
             return bcolors.GREEN
-        return bcolors.BOLD
+        return bcolors.WHITE

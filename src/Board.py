@@ -11,39 +11,39 @@ from collections import defaultdict
 
 class Board:
 
-    cc = {0: 'Life insurnace matures! Collect $100',
-        1: 'Doctor\'s fee. Pay $50',
-        2: 'Pay school tax of $150',
-        3: 'XMAS fund matures! Collect $100',
-        4: 'Go to Jail',
-        5: 'From sale of stock you get $45',
-        6: 'Collect $50 from every  player!',
-        7: 'Street repairs. $40 per house, $115 per hotel',
-        8: 'Income tax refund! Collect $20',
-        9: 'Bank error in your favor! Collect $200',
-        10: 'Get out of jail free card!',
-        11: 'Beauty contest winner! Collect $10',
-        12: 'You inherit $100',
-        13: 'Advance to GO! Collect $200',
-        14: 'Pay hospial $100',
-        15: 'Receive for services $25'}
+    # cc = {0: 'Life insurnace matures! Collect $100',
+    #     1: 'Doctor\'s fee. Pay $50',
+    #     2: 'Pay school tax of $150',
+    #     3: 'XMAS fund matures! Collect $100',
+    #     4: 'Go to Jail',
+    #     5: 'From sale of stock you get $45',
+    #     6: 'Collect $50 from every  player!',
+    #     7: 'Street repairs. $40 per house, $115 per hotel',
+    #     8: 'Income tax refund! Collect $20',
+    #     9: 'Bank error in your favor! Collect $200',
+    #     10: 'Get out of jail free card!',
+    #     11: 'Beauty contest winner! Collect $10',
+    #     12: 'You inherit $100',
+    #     13: 'Advance to GO! Collect $200',
+    #     14: 'Pay hospial $100',
+    #     15: 'Receive for services $25'}
     
-    chance = {0: 'Take a ride to the Chennai Central Railway Station', 
-        1: 'Bank pays you dividend of $50', 
-        2: 'Get out of jail free card!', 
-        3: 'Repairs! Each house pay $25, hotel $100', 
-        4: 'Pay poor tax of $15', 
-        5: 'Advance to the nearest railroad! Double rent or buy', 
-        6: 'Pay each player $50', 
-        7: 'Go back 3 spaces', 
-        8: 'Go to jail directly', 
-        9: 'Advance to Jaipur', 
-        10: 'Advance to Go!', 
-        11: 'Advance to the neaerest utility', 
-        12: 'Building loan matures! Collect $150', 
-        13: 'Advance to Ludhiana!', 
-        14: 'Advance to Mumbai', 
-        15: 'Advance to nearest railroad and pay twice the rent'}
+    # chance = {0: 'Take a ride to the Chennai Central Railway Station', 
+    #     1: 'Bank pays you dividend of $50', 
+    #     2: 'Get out of jail free card!', 
+    #     3: 'Repairs! Each house pay $25, hotel $100', 
+    #     4: 'Pay poor tax of $15', 
+    #     5: 'Advance to the nearest railroad! Double rent or buy', 
+    #     6: 'Pay each player $50', 
+    #     7: 'Go back 3 spaces', 
+    #     8: 'Go to jail directly', 
+    #     9: 'Advance to Jaipur', 
+    #     10: 'Advance to Go!', 
+    #     11: 'Advance to the neaerest utility', 
+    #     12: 'Building loan matures! Collect $150', 
+    #     13: 'Advance to Ludhiana!', 
+    #     14: 'Advance to Mumbai', 
+    #     15: 'Advance to nearest railroad and pay twice the rent'}
     
     def __init__(self):
         super().__init__()
@@ -53,11 +53,50 @@ class Board:
         self.jail_players = {}
         self.players_out = []
         self.currentPlayer = -1
+        self.cc = {}
+        self.chance = {}
     
     def get_community_or_chance(self):
-        return random.randint(0, 15)
+        # return random.randint(0, 15)
+        return 0
+
+    def _parse_community_cards(self):
+        self.cc[0] = 'Life insurnace matures! Collect $100'
+        self.cc[1] = 'Doctor\'s fee. Pay $50'
+        self.cc[2] = 'Pay school tax of $150'
+        self.cc[3] = 'XMAS fund matures! Collect $100'
+        self.cc[4] = 'Go to Jail'
+        self.cc[5] = 'From sale of stock you get $45'
+        self.cc[6] = 'Collect $50 from every  player!'
+        self.cc[7] = 'Street repairs. $40 per house, $115 per hotel'
+        self.cc[8] = 'Income tax refund! Collect $20'
+        self.cc[9] = 'Bank error in your favor! Collect $200'
+        self.cc[10] = 'Get out of jail free card!'
+        self.cc[11] = 'Beauty contest winner! Collect $10'
+        self.cc[12] = 'You inherit $100'
+        self.cc[13] = 'Advance to Start GO! Collect $200'
+        self.cc[14] = 'Pay hospial $100'
+        self.cc[15] = 'Receive for services $25'
     
-    def _parse_board(self, filename = './boards/parse_board_indian.txt'):
+    def _parse_chance_cards(self):
+        self.chance[0] = 'Take a ride to {}'.format(self.board[5].name.replace('_', ' ').capitalize())
+        self.chance[1] = 'Bank pays you dividend of $50'
+        self.chance[2] = 'Get out of jail free card!'
+        self.chance[3] = 'Repairs! Each house pay $25, hotel $100'
+        self.chance[4] = 'Pay poor tax of $15'
+        self.chance[5] = 'Advance to the nearest railroad! Double rent or buy' 
+        self.chance[6] = 'Pay each player $50'
+        self.chance[7] = 'Go back 3 spaces'
+        self.chance[8] = 'Go to jail directly'
+        self.chance[9] = 'Advance to {}'.format(self.board[24].name.replace('_', ' ').capitalize())
+        self.chance[10] = 'Advance to Start Go!'
+        self.chance[11] = 'Advance to the neaerest utility' 
+        self.chance[12] = 'Building loan matures! Collect $150' 
+        self.chance[13] = 'Advance to {}'.format(self.board[11].name.replace('_', ' ').capitalize())
+        self.chance[14] = 'Advance to {}'.format(self.board[39].name.replace('_', ' ').capitalize())
+        self.chance[15] = 'Advance to nearest railroad and pay twice the rent'
+
+    def _parse_board(self, filename = './boards/parse_board_american.txt'):
         count = 0
         with open(filename, 'r') as f:
             while (True):
@@ -81,7 +120,8 @@ class Board:
                         int(line_break[8]), int(line_break[10])))
                 count += 1
             f.close()
-        return
+        self._parse_community_cards()
+        self._parse_chance_cards()
 
     def _add_player(self, name, position = 0, balance = 1500, jail_cards = 0):
         id = len(self.players)

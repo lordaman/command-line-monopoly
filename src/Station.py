@@ -1,4 +1,5 @@
 from Trade_Card import Trade_Card
+from bcolors import bcolors
 
 class Station( Trade_Card ):
 
@@ -9,6 +10,15 @@ class Station( Trade_Card ):
     
     def get_type(self) -> int:
         return 2
+    
+    def __str__(self):
+        return '{}{:25} ${:3d}'.format(
+            bcolors.UNDERLINE, self.name, 
+            self.purchase_price) + (
+            ' O{}'.format(self.player) if self.sold else '') + (
+            ' M' if self.mortgaged else '') + (
+            ' {}h'.format(self.houses) if self.houses else '') + (
+            ' {}H'.format(self.hotels) if self.hotels else '') + f' {bcolors.ENDC}'
     
     def __repr__(self):
         curtain = '=' * 40

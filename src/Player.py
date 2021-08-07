@@ -114,12 +114,12 @@ class Player:
     def get_cards(self):
         s = ""
         i = 0
-        for key, val in self.cards.items():
+        for key, val in sorted(self.cards.items()):
             if (i%2==0):
                 s += '\t{:02d}. {:45s}'.format(key, 
                     str(val).replace('_', ' ')) + '\t'
             else:
-                s += '{:02d}. {:45s}'.format(key, 
+                s += '{}{:02d}. {:45s}'.format('\t' if val.color == 'BROWN' else '', key, 
                     str(val).replace('_', ' ')) + '\n'
             i += 1
         if s == '':

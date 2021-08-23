@@ -10,40 +10,6 @@ from bcolors import bcolors
 from collections import defaultdict
 
 class Board:
-
-    # cc = {0: 'Life insurnace matures! Collect $100',
-    #     1: 'Doctor\'s fee. Pay $50',
-    #     2: 'Pay school tax of $150',
-    #     3: 'XMAS fund matures! Collect $100',
-    #     4: 'Go to Jail',
-    #     5: 'From sale of stock you get $45',
-    #     6: 'Collect $50 from every  player!',
-    #     7: 'Street repairs. $40 per house, $115 per hotel',
-    #     8: 'Income tax refund! Collect $20',
-    #     9: 'Bank error in your favor! Collect $200',
-    #     10: 'Get out of jail free card!',
-    #     11: 'Beauty contest winner! Collect $10',
-    #     12: 'You inherit $100',
-    #     13: 'Advance to GO! Collect $200',
-    #     14: 'Pay hospial $100',
-    #     15: 'Receive for services $25'}
-    
-    # chance = {0: 'Take a ride to the Chennai Central Railway Station', 
-    #     1: 'Bank pays you dividend of $50', 
-    #     2: 'Get out of jail free card!', 
-    #     3: 'Repairs! Each house pay $25, hotel $100', 
-    #     4: 'Pay poor tax of $15', 
-    #     5: 'Advance to the nearest railroad! Double rent or buy', 
-    #     6: 'Pay each player $50', 
-    #     7: 'Go back 3 spaces', 
-    #     8: 'Go to jail directly', 
-    #     9: 'Advance to Jaipur', 
-    #     10: 'Advance to Go!', 
-    #     11: 'Advance to the neaerest utility', 
-    #     12: 'Building loan matures! Collect $150', 
-    #     13: 'Advance to Ludhiana!', 
-    #     14: 'Advance to Mumbai', 
-    #     15: 'Advance to nearest railroad and pay twice the rent'}
     
     def __init__(self):
         super().__init__()

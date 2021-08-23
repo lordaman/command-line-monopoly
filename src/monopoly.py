@@ -16,6 +16,7 @@ class monopoly:
         self.curr_player = 0
         self.num_rolls = 0
         self.roll_choice = roll_choice
+        self._len_board = len(self.board.board)
     
     def print_options(self):
         print('\t0/help    : Print all options')
@@ -220,7 +221,7 @@ class monopoly:
         elif val == 5:
             jump_pos = (((self.board.
                 player_positions[
-                self.curr_player]+5)//10)*10 + 5) % len(self.board.board)
+                self.curr_player]+5)//10)*10 + 5) % self._len_board
             self.jump_to_place(jump_pos, True)
         elif val == 6:
             rent = (len(self.board.players) - 1) * 50
@@ -264,7 +265,7 @@ class monopoly:
         elif val == 15:
             jump_pos = (((self.board.
                 player_positions[
-                self.curr_player]+5)//10)*10 + 5) % len(self.board.board)
+                self.curr_player]+5)//10)*10 + 5) % self._len_board
             self.jump_to_place(jump_pos, True)
 
     def check_strings(self, s):
@@ -535,7 +536,7 @@ class monopoly:
                 except:
                     print('Invalid property ID number')
                     continue
-                if (property_id < len(self.board.board)) and (property_id > 0):
+                if (property_id < self._len_board) and (property_id > 0):
                     card = self.board.board[property_id]
                 else:
                     print('Invalid ID:( Try again')
@@ -558,13 +559,15 @@ class monopoly:
                 print('\t{}'.format(i.name))
 
 while True:
-    print('1. Indian Board\n2. American Board')
+    print('1. Indian Board\n2. American Board\n3. United Kingdom Board')
     try:
         b_choice = int(input('Which board do you want to play with? (Enter Number): '))
         if b_choice == 1:
             b_txt = './boards/parse_board_indian.txt'
-        else:
+        elif b_choice == 2:
             b_txt = './boards/parse_board_american.txt'
+        elif b_choice == 3:
+            b_txt = './boards/parse_board_uk.txt'
         break
     except:
         print('Invalid Choice! Choose again.')
